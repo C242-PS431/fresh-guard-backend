@@ -1,0 +1,15 @@
+@startuml FreshGuard
+left to right direction
+
+actor User as user
+
+user ---> (Mengisi data credential untuk login)
+user ---> (Mengisi data credential untuk registrasi)
+user ---> (Melihat data profile diri)
+user ---> (Memperbarui data diri)
+user ---> (Melihat daftar toko buah)
+user ---> (Mendapatkan rekomendasi toko by week)
+user ---> (Melakukan scan buah atau sayuran\nuntuk mengukur tingkat kesegaran)
+user ---> (Tracking nutirsi)
+
+@enduml

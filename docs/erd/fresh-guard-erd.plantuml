@@ -1,0 +1,112 @@
+@startuml fresh-guard-erd
+
+entity users {
+    id: VARCHAR
+    username: VARCHAR(100)
+    password: VARCHAR(100)
+    created_at: TIMESTAMP
+    updated_at: TIMESTAMP
+    deleted_at: TIMESTAMP
+    --
+}
+
+entity user_profile {
+    id: VARCHAR
+    user_id: VARCHAR
+    full_name: VARCHAR(100)
+    birth_date: DATE
+    gender: VARCHAR(20)
+    profile_picture: VARCHAR(100)
+    address: TEXT
+    created_at: TIMESTAMP
+    updated_at: TIMESTAMP
+    deleted_at: TIMESTAMP
+    --
+}
+
+entity scan_results {
+    id: VARCHAR
+    user_id: VARCHAR
+    produce_type_id: VARCHAR
+    freshness_score: DECIMAL(3,2)
+    rottenness_score: DECIMAL(3,2)
+    consumable: BOOLEAN
+    should_consumed_in: INT
+    notes: TEXT
+    scanned_at: TIMESTAMP
+    --
+}
+
+entity produce_type {
+    id: VARCHAR
+    type: VARCHAR(30)
+    storage_tips: TEXT
+    --
+}
+
+entity stores {
+    id: VARCHAR
+    name : VARCHAR(100)
+    description: TEXT
+    address: TEXT
+    operation_time: VARCHAR(100)
+    phone: VARCHAR(15)
+    latitude: DECIMAL(12,10)
+    longitude: DECIMAL(13,10)
+    created_at: TIMESTAMP
+    updated_at: TIMESTAMP
+    deleted_at: TIMESTAMP
+    --
+}
+
+entity favorite_store {
+    id: VARCHAR
+    user_id: VARCHAR
+    store_id: VARCHAR
+    created_at: TIMESTAMP
+    --
+}
+
+entity store_reviews {
+    id: VARCHAR
+    user_id: VARCHAR
+    store_id: VARCHAR
+    rating: FLOAT
+    comment: TEXT
+    created_at: TIMESTAMP
+    updated_at: TIMESTAMP
+    deleted_at: TIMESTAMP
+    --
+}
+
+entity products {
+    id: VARCHAR
+    store_id: VARCHAR
+    product_category_id: VARCHAR
+    name: VARCHAR(100)
+    description: TEXT
+    price: DECIMAL(12,2)
+    stock: INT
+    created_at: TIMESTAMP
+    updated_at: TIMESTAMP
+    deleted_at: TIMESTAMP
+    ---
+}
+
+entity product_category {
+    id: VARCHAR
+    category: VARCHAR(100)
+    ---
+}
+
+' Relations
+users -- user_profile
+users --o{ scan_results
+scan_results }o-- produce_type
+users --o{ favorite_store
+stores --o{ favorite_store
+users --o{ store_reviews
+stores --o{ store_reviews
+stores --o{ products
+products }o-- product_category
+@enduml
