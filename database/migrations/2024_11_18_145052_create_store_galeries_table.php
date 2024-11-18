@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('produce_types', function (Blueprint $table) {
-            $table->string("id")->primary();
-            $table->string("type", 30);
-            $table->text("storage_tips")->nullable();
+        Schema::create('store_galeries', function (Blueprint $table) {
+            $table->string('id', 20)->primary();
+            $table->string('store_id', 20);
+            $table->string('name');
+            $table->string('path');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -23,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('produce_types');
+        Schema::dropIfExists('store_galeries');
     }
 };

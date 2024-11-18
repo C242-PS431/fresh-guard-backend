@@ -15,8 +15,8 @@ entity users {
 
 entity scan_results {
     +id: VARCHAR(20)
-    *user_id: VARCHAR
-    *produce_id: VARCHAR
+    *user_id: VARCHAR(20)
+    *produce_id: VARCHAR(20)
     freshness_score: DECIMAL(3,2)
     created_at: TIMESTAMP
     --
@@ -28,7 +28,7 @@ entity scan_result_tracks {
     --
 }
 
-entity produce {
+entity produces {
     +id: VARCHAR(20)
     name: VARCHAR(100)
     calories: INT
@@ -55,17 +55,20 @@ entity stores {
     --
 }
 
-entity stores_galeries {
+entity store_galeries {
     +id: VARCHAR(20)
     *store_id: VARCHAR(20)
     name: VARCHAR(100)
     path: VARCHAR(255)
+    created_at: TIMESTAMP
+    updated_at: TIMESTAMP
+    deleted_at: TIMESTAMP
     --
 }
 
-entity favorite_store {
-    *user_id: VARCHAR
-    *store_id: VARCHAR
+entity favorite_stores {
+    *user_id: VARCHAR(20)
+    *store_id: VARCHAR(20)
     --
 }
 
@@ -85,17 +88,17 @@ entity products {
 
 entity product_categories {
     +id: VARCHAR(20)
-    category: VARCHAR(50)
+    category: VARCHAR(100)
 }
 
 ' Relations
 users --o{ scan_results
-scan_results }o-- produce
-users --o{ favorite_store
-stores --o{ favorite_store
+scan_results }o-- produces
+users --o{ favorite_stores
+stores --o{ favorite_stores
 stores --o{ products
 products }o-- product_categories
-stores --o{ stores_galeries
+stores --o{ store_galeries
 users --o{ scan_result_tracks
-scan_results --o{ scan_result_tracks 
+scan_results -- scan_result_tracks 
 @enduml

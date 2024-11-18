@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('stores', function (Blueprint $table) {
+        Schema::create('produces', function (Blueprint $table) {
             $table->string("id", 20)->primary();
             $table->string("name", 100);
-            $table->text("description");
-            $table->text("address");
-            $table->string("operation_time", 100)->nullable();
-            $table->string("phone", 20)->nullable();
-            $table->string("gmap_url")->nullable();
-            $table->timestamps();
-            $table->softDeletes();
+            $table->integer("calories");
+            $table->integer("protein");
+            $table->integer("carbohydrates");
+            $table->integer("fiber");
+            $table->integer("vitamin_a");
+            $table->integer("vitamin_b");
+            $table->integer("vitamin_c");
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('stores');
+        Schema::dropIfExists('produces');
     }
 };

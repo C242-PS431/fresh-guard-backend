@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StoreReview extends Model
+class ScanResultTrack extends Model
 {
     //
 }

@@ -11,18 +11,14 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('scan_results', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->string('user_id');
-            $table->string("produce_type_id", 20);
+            $table->string('id', 20)->primary();
+            $table->string('user_id', 20);
+            $table->string("produce_id", 20);
             $table->decimal("freshness_score", 3, 2);
-            $table->decimal("rotten_score", 3, 2);
-            $table->timestamp("scanned_at");
-            $table->boolean("consumable")->default(false);
-            $table->integer("should_consumed_id")->default(0);
-            $table->text("notes")->nullable();
+            $table->timestamp("created_at");
 
             $table->foreign('user_id')->on('users')->references('id');
-            $table->foreign('produce_type_id')->on('produce_types')->references('id');
+            $table->foreign('produce_id')->on('produces')->references('id');
         });
     }
 
