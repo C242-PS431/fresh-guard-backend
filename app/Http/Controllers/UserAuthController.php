@@ -11,7 +11,7 @@ use Illuminate\Http\Resources\Json\ResourceResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Illuminate\Http\JsonResponse;
 
 class UserAuthController extends Controller
 {
@@ -59,5 +59,16 @@ class UserAuthController extends Controller
         $token = $user->createToken($request->input('device_name') ?: $request->header('User-Agent'));
 
         return $this->createSuccessResponse($user, $token, 'Login Sukses', 200);
+    }
+
+    public function logout(Request $request): JsonResponse
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'status' => 'succes',
+            'message' => 'Logout berhasil',
+            'body' => null
+        ]);
     }
 }
