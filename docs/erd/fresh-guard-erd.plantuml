@@ -24,7 +24,7 @@ entity scan_results {
 
 entity scan_result_tracks {
     *user_id
-    *produce_id
+    *scan_result_id
     --
 }
 
