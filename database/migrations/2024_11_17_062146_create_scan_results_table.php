@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('user_id', 20);
             $table->string("produce_id", 20);
             $table->decimal("freshness_score", 3, 2);
+            $table->boolean("is_tracked")->default(false);
             $table->timestamp("created_at");
 
             $table->foreign('user_id')->on('users')->references('id');

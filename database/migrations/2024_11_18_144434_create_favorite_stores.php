@@ -17,6 +17,7 @@ return new class extends Migration
 
             $table->foreign('user_id')->on('users')->references('id');
             $table->foreign('store_id')->on('stores')->references('id');
+            $table->unique(['user_id', 'store_id']);
         });
     }
 

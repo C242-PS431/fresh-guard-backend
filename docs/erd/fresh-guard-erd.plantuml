@@ -18,13 +18,8 @@ entity scan_results {
     *user_id: VARCHAR(20)
     *produce_id: VARCHAR(20)
     freshness_score: DECIMAL(3,2)
+    is_tracked: BOOLEAN
     created_at: TIMESTAMP
-    --
-}
-
-entity scan_result_tracks {
-    *user_id
-    *scan_result_id
     --
 }
 
@@ -99,6 +94,4 @@ stores --o{ favorite_stores
 stores --o{ products
 products }o-- product_categories
 stores --o{ store_galeries
-users --o{ scan_result_tracks
-scan_results -- scan_result_tracks 
 @enduml
