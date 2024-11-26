@@ -60,13 +60,15 @@ class User extends Authenticatable
         return $this->hasMany(ScanResult::class);
     }
 
-    public function scanResultTracked(): HasManyThrough
-    {
-        return $this->hasManyThrough(ScanResult::class, ScanResultTrack::class);
-    }
-
     public function favoritedStores(): BelongsToMany
     {
         return $this->belongsToMany(Store::class, 'favorite_stores', 'user_id', 'store_id');
+    }
+
+    public function isFavoritedStore($storeId): bool
+    {
+        return 0 < $this->join('favorite_stores', 'users.id', '=', 'user_id')
+            // ->join('stores', 'favorite_stores.store_id', '=', 'stores.id')
+            ->where('favorite_stores.store_id', $storeId)->count();
     }
 }

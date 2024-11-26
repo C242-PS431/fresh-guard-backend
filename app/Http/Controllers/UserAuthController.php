@@ -51,7 +51,7 @@ class UserAuthController extends Controller
         $user = User::where('username', $username)->first();
         if (is_null($user) || !Hash::check($password, $user->password)) {
             throw new HttpResponseException(response()->json([
-                "status" => "failed",
+                "status" => "fail",
                 "data" => null,
                 "message" => "Username atau Password salah."
             ], 400));
@@ -67,8 +67,7 @@ class UserAuthController extends Controller
 
         return response()->json([
             'status' => 'succes',
-            'message' => 'Logout berhasil',
-            'body' => null
-        ]);
+            'message' => 'Logout berhasil'
+        ], 200);
     }
 }

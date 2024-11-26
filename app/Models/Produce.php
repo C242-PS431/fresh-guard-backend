@@ -14,6 +14,13 @@ class Produce extends Model
     protected $keyType = 'string';
     public $incrementing = false;
     public $timestamps = false;
+    public $fillable = [
+        'name',
+        'calories',
+        'protein',
+        'carbohydrates',
+        'fiber'
+    ];
 
     public function scanResults(): HasMany
     {

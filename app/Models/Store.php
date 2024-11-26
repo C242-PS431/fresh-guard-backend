@@ -15,10 +15,18 @@ class Store extends Model
     protected $keyType = 'string';
     public $incrementing = false;
     public $timestamps = true;
+    public $fillable = [
+        'name',
+        'description',
+        'address',
+        'operation_time',
+        'phone',
+        'gmap_url',
+    ];
 
     public function storeGaleries(): HasMany
     {
-        return $this->hasMany(StoreGaleries::class);
+        return $this->hasMany(StoreGalery::class);
     }
 
     public function favoritedByUsers(): BelongsToMany

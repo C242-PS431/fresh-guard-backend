@@ -1,0 +1,346 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Scan Fruits and Vegetables API",
+    "description": "API for scan Fruits and Vegetables to assess freshness and rotteness",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://{domain}/api/v1",
+      "description": "Fresh Guard API Server",
+      "variables": {
+        "domain": {
+          "default": "localhost",
+          "enum": [
+            "localhost",
+            "prod",
+            "not-ready-yet"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/api/v1/scans/freshness": {
+      "post": {
+        "summary": "Scanning produce freshness",
+        "description": "Endpoint for uploading image and get freshness result",
+        "parameters": [
+          {
+            "required": true,
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "dummy": {
+                "value": "Bearer _your_login_token_"
+              },
+              "real": {
+                "value": "Bearer 1|HVMFX6wESqVQPoZ25up0zYhdTDQDf7WHKiPDorWk4239d639"
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Image of fruit/vegetable for scanning"
+                  }
+                },
+                "required": [
+                  "image"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Image scann success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "apple": {
+                    "value": {
+                      "status": "success",
+                      "message": "Berhasil scan tingkat kesegaran buah",
+                      "data": {
+                        "scan_result": {
+                          "id": "857632304780",
+                          "freshness_score": "0.3",
+                          "created_at": "2024-11-21T12:38:36.762654Z",
+                          "produce": "Apple",
+                          "scanned_at": "2024-11-21T12:38:36.762654Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Image is invalid or no send image",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "no image sended": {
+                    "value": {
+                      "status": "fail",
+                      "message": "The image field is required.",
+                      "errors": {
+                        "image": [
+                          "The image field is required."
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/scans/{scanId}/track": {
+      "summary": "Track scan or mark consumed fruit or vegetable",
+      "post": {
+        "parameters": [
+          {
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "name": "scanId",
+            "description": "Unique ID of scan result"
+          },
+          {
+            "required": true,
+            "in": "header",
+            "name": "Authorization",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer _user_login_token_"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Track scan or mark fruit/vegetable as consumed is success",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "success",
+                  "message": "Sukses track hasil scan."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "When the ID scan not exist",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "fail",
+                  "message": "ID scan tidak ditemukan."
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unlogged user",
+            "content":{
+              "application/json": {
+                "example": {
+                  "message": "unauthenticated"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/scans": {
+      "get": {
+        "summary": "Get history data scan",
+        "parameters": [
+          {
+            "required": true,
+            "in": "header",
+            "name": "Authorization",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer _user_login_token_"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "example": 1
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "description": "Determine how many data get",
+            "schema": {
+              "type": "integer",
+              "default": 5
+            },
+            "example": 5
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "default": null
+            },
+            "examples": {
+              "today": {
+                "value": "today"
+              },
+              "tanggal": {
+                "value": "20-11-2024"
+              }
+            }
+          },
+          {
+            "in": "query",
+            "name": "get_tracked",
+            "schema": {
+              "type": "string",
+              "default": false
+            },
+            "examples": {
+              "boolean": {
+                "value": true
+              },
+              "number": {
+                "value": 1
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get data scans",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "/api/v1/scans?date=today&per_page=2": {
+                    "value": {
+                      "total": 2,
+                      "data": [
+                        {
+                          "id": "205558441489",
+                          "produce": {
+                            "id": "446215456398",
+                            "name": "apple",
+                            "calories": 95000,
+                            "protein": 500,
+                            "carbohydrates": 25000,
+                            "fiber": 4400
+                          },
+                          "is_tracked": false,
+                          "freshness_score": "0.70",
+                          "created_at": "2024-11-21 17:11:22"
+                        },
+                        {
+                          "id": "226757147545",
+                          "produce": {
+                            "id": "446215456398",
+                            "name": "apple",
+                            "calories": 95000,
+                            "protein": 500,
+                            "carbohydrates": 25000,
+                            "fiber": 4400
+                          },
+                          "is_tracked": false,
+                          "freshness_score": "0.70",
+                          "created_at": "2024-11-21 17:12:06"
+                        }
+                      ],
+                      "links": {
+                        "first": "http://localhost:8000/api/v1/scans?page=1",
+                        "last": "http://localhost:8000/api/v1/scans?page=4",
+                        "prev": null,
+                        "next": "http://localhost:8000/api/v1/scans?page=2"
+                      },
+                      "meta": {
+                        "current_page": 1,
+                        "from": 1,
+                        "last_page": 4,
+                        "links": [
+                          {
+                            "url": null,
+                            "label": "&laquo; Previous",
+                            "active": false
+                          },
+                          {
+                            "url": "http://localhost:8000/api/v1/scans?page=1",
+                            "label": "1",
+                            "active": true
+                          },
+                          {
+                            "url": "http://localhost:8000/api/v1/scans?page=2",
+                            "label": "2",
+                            "active": false
+                          },
+                          {
+                            "url": "http://localhost:8000/api/v1/scans?page=3",
+                            "label": "3",
+                            "active": false
+                          },
+                          {
+                            "url": "http://localhost:8000/api/v1/scans?page=4",
+                            "label": "4",
+                            "active": false
+                          },
+                          {
+                            "url": "http://localhost:8000/api/v1/scans?page=2",
+                            "label": "Next &raquo;",
+                            "active": false
+                          }
+                        ],
+                        "path": "http://localhost:8000/api/v1/scans",
+                        "per_page": 2,
+                        "to": 2,
+                        "total": 7
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unlogged user trying to get data",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "unauthenticated"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

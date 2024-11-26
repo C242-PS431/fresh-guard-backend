@@ -1,0 +1,289 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Authentication API",
+    "description": "API for Authentication",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://{domain}/api",
+      "description": "Fresh Guard API Server",
+      "variables": {
+        "domain": {
+          "default": "localhost",
+          "enum": [
+            "localhost",
+            "prod",
+            "not-ready-yet"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "summary": "Register new acount",
+        "description": "Register new acount user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 4,
+                    "maxLength": 100
+                  },
+                  "username": {
+                    "type": "string",
+                    "minLength": 4,
+                    "maxLength": 100,
+                    "pattern": "[a-z0-9_]",
+                    "description": "username hanya boleh huruf, angka dan underscore. Kalau username yang dikirimkan terdapat huruf besar akan otomatis dikonversi menjadi huruf kecil oleh backend"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "device_name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "username",
+                  "password"
+                ]
+              },
+              "examples": {
+                "ucup": {
+                  "value": {
+                    "name": "Ucup Membahana",
+                    "username": "ucup_surucup",
+                    "password": "ucup123",
+                    "device_name": "Desktop-5151"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Register new acount success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "ucup": {
+                    "value": {
+                      "status": "success",
+                      "message": "Registrasi Sukses",
+                      "data": {
+                        "user": {
+                          "id": "174041042380",
+                          "name": "Ucup Membahana",
+                          "username": "ucup_surucup",
+                          "created_at": "2024-11-21T08:35:16.000000Z"
+                        },
+                        "token": "1|qAy59uM7DO8bwZtmszVoxgpCcJ8GFKjfmePFww0l6afbb8dd",
+                        "token_expires_at": null
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Register fail, invalid data sended",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "ucup": {
+                    "value": {
+                      "status": "failed",
+                      "data": null,
+                      "message": "The username field must not be greater than 100 characters.",
+                      "errors": {
+                        "username": [
+                          "The username field must not be greater than 100 characters.",
+                          "The username field format is invalid."
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Username already taken",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "ucup": {
+                    "value": {
+                      "status": "fail",
+                      "message": "The username has already been taken.",
+                      "errors": {
+                        "username": [
+                          "The username has already been taken."
+                        ],
+                        "password": [
+                          "Passsword too lenght."
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "Login",
+        "description": "API for Login and get Authentication Token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "username",
+                  "password"
+                ]
+              },
+              "examples": {
+                "ucup": {
+                  "value": {
+                    "username": "ucup_surucup",
+                    "password": "password123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Login success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "ucup": {
+                    "value": {
+                      "status": "success",
+                      "message": "Login Sukses",
+                      "data": {
+                        "user": {
+                          "id": "174041042380",
+                          "name": "Ucup Membahana",
+                          "username": "ucup_surucup",
+                          "created_at": "2024-11-21T08:35:16.000000Z"
+                        },
+                        "token": "3|ho3sYWBHJUGCMutmXpHtRjVCSZ8MFc3Yvct4EKrD1278a3e2",
+                        "token_expires_at": null
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Password or username wrong",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "ucup": {
+                    "value": {
+                      "status": "fail",
+                      "message": "Username atau Password salah."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "summary": "Logout",
+      "post": {
+        "parameters": [
+          {
+            "required": true,
+            "in": "header",
+            "name": "Authorization",
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "contoh-gambaran": {
+                "value": "Bearer _your_login_token_"
+              },
+              "real": {
+                "value": "Bearer 4|WR9KtHt4fIdYwU5EL7bwYzOj189NeVu6FJp2KKjHb1438660"
+              }
+            }
+          },
+          {
+            "required": false,
+            "in": "header",
+            "name": "Accept",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Logout",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "ucup": {
+                    "value": {
+                      "status": "succes",
+                      "message": "Logout berhasil"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "When unloggen user trying to logout",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "ucup": {
+                    "value": {
+                      "message": "unauthenticated"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

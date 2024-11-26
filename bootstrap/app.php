@@ -18,9 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function(AuthenticationException $e, $request){
             return response()->json([
-                'status'=> 'failed',
+                // 'status'=> 'failed',
                 'message' => 'unauthenticated',
-                'data' => null
+                // 'data' => null
             ], 401);
         });
     })->create();

@@ -3,12 +3,9 @@
 namespace App\Models;
 
 use App\Traits\HasNanoid;
-use Illuminate\Database\Eloquent\Factories\BelongsToRelationship;
+use Hidehalo\Nanoid\Client;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Carbon;
 
 /**
@@ -31,6 +28,7 @@ class ScanResult extends Model
     {
         parent::boot();
         static::creating(function ($model) {
+            $model->id = (new Client())->formatedId('0123456789', 12);
             $model->created_at = Carbon::now();
         });
     }
@@ -43,10 +41,5 @@ class ScanResult extends Model
     public function produce(): BelongsTo
     {
         return $this->belongsTo(Produce::class);
-    }
-
-    public function trackedByUser(): HasOneThrough
-    {
-        return $this->hasOneThrough(User::class, ScanResultTrack::class);
     }
 }
