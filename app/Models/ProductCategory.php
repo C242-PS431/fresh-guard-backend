@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\HasNanoid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProductCategory extends Model
@@ -13,8 +14,8 @@ class ProductCategory extends Model
     public $incrementing = false;
     public $timestamps = false;
 
-    public function products(): HasMany
+    public function products(): BelongsToMany
     {
-        return $this->hasMany(Product::class);
+        return $this->belongsToMany(Product::class, 'product_category', 'product_id', 'category_id');
     }
 }

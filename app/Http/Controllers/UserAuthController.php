@@ -7,10 +7,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\ResourceResponse;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Password;
 use Illuminate\Http\JsonResponse;
 
 class UserAuthController extends Controller
@@ -39,7 +36,7 @@ class UserAuthController extends Controller
         /** @var \App\Models\User */
         $user = User::create($credentials);
         $token = $user->createToken($request->input('device_name') ?: $request->header('User-Agent'));
-        return $this->createSuccessResponse($user, $token, 'Registrasi Sukses', 201);
+        return $this->createSuccessResponse($user, $token, __('auth.register.success'), 201);
     }
 
     public function login(Request $request): JsonResponse
@@ -53,12 +50,12 @@ class UserAuthController extends Controller
             throw new HttpResponseException(response()->json([
                 "status" => "fail",
                 "data" => null,
-                "message" => "Username atau Password salah."
+                "message" => __('auth.usernamepassword')
             ], 400));
         }
         $token = $user->createToken($request->input('device_name') ?: $request->header('User-Agent'));
 
-        return $this->createSuccessResponse($user, $token, 'Login Sukses', 200);
+        return $this->createSuccessResponse($user, $token, __('auth.login.success'), 200);
     }
 
     public function logout(Request $request): JsonResponse
@@ -66,8 +63,8 @@ class UserAuthController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'status' => 'succes',
-            'message' => 'Logout berhasil'
+            'status' => 'success',
+            'message' => __('auth.logout.success')
         ], 200);
     }
 }

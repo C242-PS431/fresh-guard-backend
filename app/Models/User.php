@@ -67,8 +67,11 @@ class User extends Authenticatable
 
     public function isFavoritedStore($storeId): bool
     {
-        return 0 < $this->join('favorite_stores', 'users.id', '=', 'user_id')
+        return (bool) $this->selectRaw('COUNT(favorite_stores.store_id) > 0 as is_favorited')
+            ->join('favorite_stores', 'users.id', '=', 'user_id')
             // ->join('stores', 'favorite_stores.store_id', '=', 'stores.id')
-            ->where('favorite_stores.store_id', $storeId)->count();
+            ->where('favorite_stores.store_id', $storeId)
+            ->first()
+            ->is_favorited;
     }
 }

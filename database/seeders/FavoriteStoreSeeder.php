@@ -16,8 +16,8 @@ class FavoriteStoreSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::find("059847429974");
-        $store = Store::get()->pop();
+        $user = User::find("409605036685");
+        $store = Store::get()->random();
         $user->favoritedStores()->attach($store->id);
     }
 }

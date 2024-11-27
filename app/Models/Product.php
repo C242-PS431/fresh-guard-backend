@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\HasNanoid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
@@ -20,8 +21,8 @@ class Product extends Model
         return $this->belongsTo(Store::class);
     }
 
-    public function productCategory(): BelongsTo
+    public function productCategories(): BelongsToMany
     {
-        return $this->belongsTo(ProductCategory::class);
+        return $this->belongsToMany(ProductCategory::class, 'product_category', 'product_id', 'category_id');
     }
 }
