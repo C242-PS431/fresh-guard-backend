@@ -81,6 +81,11 @@ entity products {
     ---
 }
 
+entity product_category {
+    *product_id: VARCHAR
+    *category_id: VARCHAR
+}
+
 entity product_categories {
     +id: VARCHAR(20)
     category: VARCHAR(100)
@@ -92,6 +97,7 @@ scan_results }o-- produces
 users --o{ favorite_stores
 stores --o{ favorite_stores
 stores --o{ products
-products }o-- product_categories
+products --o{ product_category
+product_categories --o{ product_category
 stores --o{ store_galeries
 @enduml
