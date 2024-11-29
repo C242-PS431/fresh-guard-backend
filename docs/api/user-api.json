@@ -1,0 +1,270 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "User API",
+    "description": "User API to get user profile data and photo",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://{domain}",
+      "description": "Fresh Guard API Server",
+      "variables": {
+        "domain": {
+          "default": "localhost",
+          "enum": [
+            "localhost",
+            "prod",
+            "not-ready-yet"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/api/v1/profile": {
+      "get": {
+        "summary": "Get uathenticated user profile",
+        "description": "Retrieves the authenticated user's profile information",
+        "tags": [
+          "User Profile"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "#/components/parameters/Accept"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "Ucup": {
+                    "value": {
+                      "status": "success",
+                      "message": "Sukses mengambil data user",
+                      "data": {
+                        "id": "538817296693",
+                        "name": "Ucup Membahana",
+                        "username": "ucup_surucup",
+                        "has_pfp": false
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "Unauthenticated User": {
+                    "value": {
+                      "message": "unauthenticated"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/profile/picture": {
+      "get": {
+        "summary": "Get authenticated user profile picture",
+        "description": "Retrieves the authenticated user's profile picture",
+        "tags": [
+          "User Profile"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "#/components/parameters/Accept"
+          },
+          {
+            "required": false,
+            "in": "header",
+            "name": "Content-Disposition",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "inline",
+                "attachment"
+              ],
+              "default": "inline"
+            },
+            "description": "Determines how the profile picture should be recieved",
+            "examples": {
+              "render": {
+                "value": "inline"
+              },
+              "download": {
+                "value": "attachment"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profile picture file",
+            "content": {
+              "image/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            },
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "MIME type of the image"
+              },
+              "Content-Disposition": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "File disposition and filename"
+              }
+            }
+          },
+          "404": {
+            "description": "Profile picture not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "message": "unauthenticated"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "The status of request"
+          },
+          "message": {
+            "type": "string",
+            "description": "The message of request"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "description": "The user's ID"
+              },
+              "name": {
+                "type": "string",
+                "description": "The user's full name"
+              },
+              "username": {
+                "type": "string",
+                "description": "The user's username"
+              },
+              "has_pfp": {
+                "type": "boolean",
+                "description": "Indicates if the user has a profile picture"
+              }
+            }
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "fail"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "parameters": {
+      "Authorization": {
+        "required": true,
+        "in": "header",
+        "name": "Authorization",
+        "description": "The place for put the API Token",
+        "schema": {
+          "type": "string"
+        },
+        "examples": {
+          "Contoh": {
+            "value": "Bearer _your_api_token_"
+          },
+          "Ucup": {
+            "value": "Bearer 7|kSelGIww9AlEqW4wY6ksN5XV0AD55NowcWGnTlpZ871b85d9"
+          }
+        }
+      },
+      "Accept": {
+        "in": "header",
+        "required": false,
+        "name": "Accept",
+        "description": "Determine content type of response",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "application/json",
+            "text/html"
+          ],
+          "default": "text/html"
+        },
+        "examples": {
+          "json": {
+            "value": "application/json"
+          },
+          "html": {
+            "value": "text/html"
+          }
+        }
+      }
+    }
+  }
+}

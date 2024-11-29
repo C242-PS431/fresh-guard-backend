@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://{domain}/api",
+      "url": "https://{domain}",
       "description": "Fresh Guard API Server",
       "variables": {
         "domain": {
@@ -26,6 +26,11 @@
       "post": {
         "summary": "Register new acount",
         "description": "Register new acount user",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Accept"
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -148,6 +153,11 @@
       "post": {
         "summary": "Login",
         "description": "API for Login and get Authentication Token",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Accept"
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -243,13 +253,7 @@
             }
           },
           {
-            "required": false,
-            "in": "header",
-            "name": "Accept",
-            "schema": {
-              "type": "string"
-            },
-            "example": "application/json"
+            "$ref": "#/components/parameters/Accept"
           }
         ],
         "responses": {
@@ -281,6 +285,32 @@
                 }
               }
             }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "Accept": {
+        "in": "header",
+        "required": false,
+        "name": "Accept",
+        "description": "Determine content type of response",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "application/json",
+            "text/html"
+          ],
+          "default": "text/html"
+        },
+        "examples": {
+          "json": {
+            "value": "application/json"
+          },
+          "html": {
+            "value": "text/html"
           }
         }
       }

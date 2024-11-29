@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://{domain}/api/v1",
+      "url": "https://{domain}",
       "description": "Fresh Guard API Server",
       "variables": {
         "domain": {
@@ -42,6 +42,9 @@
                 "value": "Bearer 1|HVMFX6wESqVQPoZ25up0zYhdTDQDf7WHKiPDorWk4239d639"
               }
             }
+          },
+          {
+            "$ref": "#/components/parameters/Accept"
           }
         ],
         "requestBody": {
@@ -133,6 +136,9 @@
               "type": "string"
             },
             "example": "Bearer _user_login_token_"
+          },
+          {
+            "$ref": "#/components/parameters/Accept"
           }
         ],
         "responses": {
@@ -160,7 +166,7 @@
           },
           "401": {
             "description": "unlogged user",
-            "content":{
+            "content": {
               "application/json": {
                 "example": {
                   "message": "unauthenticated"
@@ -235,6 +241,9 @@
                 "value": 1
               }
             }
+          },
+          {
+            "$ref": "#/components/parameters/Accept"
           }
         ],
         "responses": {
@@ -338,6 +347,32 @@
                 }
               }
             }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "Accept": {
+        "in": "header",
+        "required": false,
+        "name": "Accept",
+        "description": "Determine content type of response",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "application/json",
+            "text/html"
+          ],
+          "default": "text/html"
+        },
+        "examples": {
+          "json": {
+            "value": "application/json"
+          },
+          "html": {
+            "value": "text/html"
           }
         }
       }
