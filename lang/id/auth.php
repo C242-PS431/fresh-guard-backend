@@ -25,7 +25,6 @@ return [
         'success' => 'Login berhasil.',
         'fail' => 'Login gagal.',
     ],
-    ,
     'register' => [
         'success' => 'Registrasi akun berhasil.',
         'fail' => 'Registrasi akun gagal.',

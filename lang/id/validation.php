@@ -177,6 +177,11 @@ return [
             'rule-name' => 'custom-message',
         ],
     ],
+    'storage' => [
+        'file' => [
+            'notfound' => 'File tidak ditemukan pada :storage.'
+        ]
+    ],
 
     /*
     |--------------------------------------------------------------------------

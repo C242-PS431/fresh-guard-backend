@@ -23,8 +23,8 @@ Route::post('/auth/logout', [UserAuthController::class, 'logout'])
 
 
 Route::middleware('auth:sanctum')->group(function(){
-    Route::post('/v1/users/profile', [UserController::class, 'getProfile']);
-    Route::post('/v1/users/pfp', [UserController::class, 'getPfp']);
+    Route::get('/v1/profile', [UserController::class, 'getProfile']);
+    Route::get('/v1/profile/picture', [UserController::class, 'getPfp']);
     Route::post('/v1/scans/freshness', [ScanController::class, 'scanFreshness']);
     Route::put('/v1/scans/{scanResultId}/track', [ScanController::class, 'trackScan']);
     Route::get('/v1/scans', [ScanResultController::class, 'getScanResults']);

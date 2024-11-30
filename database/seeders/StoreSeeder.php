@@ -16,10 +16,10 @@ class StoreSeeder extends Seeder
         Store::create([
             'name' => 'Toko '. rand(),
             'description' => "Ini adalah toko buah",
-            'address' => 'Planet nebula',
+            'address' => 'Jl. A. Yani No.98, Melayu, Kec. Banjarmasin Tengah, Kota Banjarmasin, Kalimantan Selatan',
             'operation_time' => '05.00 - 15.00',
-            'phone' => "12345678" . random_int(100, 999),
-            'gmap_url' => 'kosong'
+            'phone' => "08123456" . random_int(100, 999),
+            'gmap_url' => 'https://maps.app.goo.gl/p5z1XkJVjYQau2JG6'
         ]);
     }
 }

@@ -11,7 +11,7 @@ class CategoryController extends Controller
 {
     public function getListProductCategories(Request $request)
     {
-        $perPage = $request->integer('perpage', 10);
+        $perPage = $request->integer('per_page', 10);
         $page = $request->integer('page', 1);
 
         $products = ProductCategory::paginate(perPage: $perPage, page: $page);

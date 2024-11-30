@@ -53,7 +53,7 @@ class UserAuthController extends Controller
                 "message" => __('auth.usernamepassword')
             ], 400));
         }
-        $token = $user->createToken($request->input('device_name') ?: $request->header('User-Agent'));
+        $token = $user->createToken($deviceName);
 
         return $this->createSuccessResponse($user, $token, __('auth.login.success'), 200);
     }

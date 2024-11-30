@@ -7,6 +7,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class StoreGaleryCollection extends ResourceCollection
 {
+
     /**
      * Transform the resource collection into an array.
      *
@@ -14,9 +15,7 @@ class StoreGaleryCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return [
-            'total' => $this->collection->count(),
-            'data' => StoreGaleryResource::collection($this->collection)
-        ];
+        $this->additional['total'] = $this->collection->count();
+        return [StoreGaleryResource::collection($this->collection)];
     }
 }

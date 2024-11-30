@@ -177,6 +177,11 @@ return [
             'rule-name' => 'custom-message',
         ],
     ],
+    'storage' => [
+        'file' => [
+            'notfound' => 'The file is not found in :storage.'
+        ]
+    ],
 
     /*
     |--------------------------------------------------------------------------

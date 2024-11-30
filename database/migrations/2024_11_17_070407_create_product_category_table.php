@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_category', function (Blueprint $table) {
-            $table->string('store_id', 20);
+            $table->string('product_id', 20);
             $table->string('category_id', 20);
 
-            $table->foreign('store_id')->references('id')->on('stores');
+            $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('category_id')->references('id')->on('product_categories');
         });
     }

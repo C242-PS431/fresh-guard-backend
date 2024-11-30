@@ -13,6 +13,9 @@ class ProductCategory extends Model
     protected $keyType = 'string';
     public $incrementing = false;
     public $timestamps = false;
+    public $fillable = [
+        'category'
+    ];
 
     public function products(): BelongsToMany
     {

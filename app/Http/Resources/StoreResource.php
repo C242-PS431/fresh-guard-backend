@@ -14,6 +14,9 @@ class StoreResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $galeries = new StoreGaleryCollection($this->storeGaleries);
+        unset($galeries->additional['total']);
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -23,7 +26,7 @@ class StoreResource extends JsonResource
             'phone' => $this->phone,
             'is_favorited' => $request->user()->isFavoritedStore($this->id),
             'gmap_url' => $this->gmap_url,
-            // 'galeries' => new StoreGaleryCollection($this->storeGaleries)
+            'galeries' => $this->when(isset($this->additional['status']), $galeries)
         ];
     }
 }

@@ -5,14 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
     public function getProfile(Request $request)
     {
-        $user = $request->user();
-        return new  UserResource($user);
+        $user = Auth::user();
+        return (new  UserResource($user))
+            ->additional([
+                'status' => 'success',
+                'message' => 'Sukses mengambil data user',
+            ]);
     }
 
     public function getPfp(Request $request)
@@ -45,7 +50,7 @@ class UserController extends Controller
         if (Storage::disk('gcs')->exists($path)) {
             abort(response()->json([
                 'status' => 'fail',
-                'message' => 'File tidak ditemukan pada Cloud Storage.'
+                'message' => __('storage.file.notfound', ['storage' => 'Cloud Storage'])
             ])->setStatusCode(404));
         }
     }

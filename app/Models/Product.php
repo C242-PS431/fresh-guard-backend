@@ -16,6 +16,14 @@ class Product extends Model
     public $incrementing = false;
     public $timestamps = true;
 
+    public $fillable = [
+        'store_id',
+        'name',
+        'description',
+        'price',
+        'stock'
+    ];
+
     public function store(): BelongsTo
     {
         return $this->belongsTo(Store::class);

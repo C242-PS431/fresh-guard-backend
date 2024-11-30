@@ -18,7 +18,7 @@ class StoreController extends Controller
     {
         $perPage = $request->integer('per_page', 5);
         $page = $request->integer('page', 1);
-        $getFavorite = $request->boolean('favorite');
+        $getFavorite = $request->boolean('favorite', false);
 
         if ($getFavorite) {
             $stores = $request->user()->favoritedStores()->paginate(perPage: $perPage, page: $page);
@@ -60,17 +60,11 @@ class StoreController extends Controller
     {
         $store = Store::find($storeId);
         $this->validateStoreFound($store);
-        return new StoreResource($store);
+        return (new StoreResource($store))->additional([
+            'status' => 'success',
+            'message' => __('message.store.detail.success')
+        ]);
     }
-
-    public function getStoreGaleries($storeId, Request $request)
-    {
-        $store = Store::find($storeId);
-        $this->validateStoreFound($store);
-        $galeries = $store->storeGaleries ?? collect();
-        return new StoreGaleryCollection($galeries);
-    }
-
 
     private function validateStoreFound($store)
     {
@@ -91,22 +85,14 @@ class StoreController extends Controller
     public function validateStoreNotAlreadyFavorited(string $storeId)
     {
         if (Auth::user()->isFavoritedStore($storeId)) {
-            throw new HttpResponseException(response()->json([
-                'status' => 'already_favorited',
-                'message' => 'Toko sudah ditambahkan ke favorite sebelumnya.',
-                'data' => false
-            ], 200));
+            throw new HttpResponseException(response(status: 204));
         }
     }
 
     public function validateStoreAlreadyFavorited(string $storeId)
     {
-        if (Auth::user()->isFavoritedStore($storeId)) {
-            throw new HttpResponseException(response()->json([
-                'status' => 'not_favorited',
-                'message' => 'Toko belum ditambahkan ke favorite sebelumnya.',
-                'data' => false 
-            ], 200));
+        if (!Auth::user()->isFavoritedStore($storeId)) {
+            throw new HttpResponseException(response(status: 204));
         }
     }
 }
