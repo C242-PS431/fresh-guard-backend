@@ -1,0 +1,528 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Scan Fruits and Vegetables API",
+    "description": "API Stores for Feshguard App",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://{domain}",
+      "description": "Fresh Guard API Server",
+      "variables": {
+        "domain": {
+          "default": "localhost",
+          "enum": [
+            "localhost",
+            "prod",
+            "not-ready-yet"
+          ]
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/api/v1/stores": {
+      "get": {
+        "summary": "Get list of stores",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "#/components/parameters/Accept"
+          },
+          {
+            "required": false,
+            "in": "query",
+            "name": "favorite",
+            "schema": {
+              "type": "string",
+              "enum": ["1", "0", "true", "false", "on", "off", "yes", "no"],
+              "default": "false"
+            },
+            "examples": {
+              "Boolean":{
+                "value": "true"
+              },
+              "Number":{
+                "value": "1"
+              },
+              "Active":{
+                "value": "on"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get the store datas",
+            "content": {
+              "application/json": {
+                "example": {
+                  "$ref": "#/components/examples/StoreDatas"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          }
+        }
+      }
+    },
+    "/api/v1/stores/{storeId}": {
+      "summary": "Get detail of stores",
+      "get": {
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "#/components/parameters/Accept"
+          },
+          {
+            "$ref": "#/components/parameters/StoreId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get detail of store",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Store Detail": {
+                    "value": {
+                      "$ref": "#/components/examples/StoreDetail"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          }
+        }
+      }
+    },
+    "/api/v1/stores/{storeId}/favorite": {
+      "post": {
+        "description": "Add store to be favorite.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "#/components/parameters/Accept"
+          },
+          {
+            "$ref": "#/components/parameters/StoreId"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success add store to favorite.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "favorite_added",
+                  "message": "Sukses menambahkan toko ke daftar favorite.",
+                  "data": true
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "The Store already added to favorite."
+          }
+        }
+      },
+      "delete": {
+        "description": "Remove store from favorite",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "#/components/parameters/Accept"
+          },
+          {
+            "$ref": "#/components/parameters/StoreId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success remove store from favorite.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "favorite_removed",
+                  "message": "Toko telah dihapus dari daftar favorite.",
+                  "data": true
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "The Store already added to favorite."
+          }
+        }
+      }
+    },
+    "/api/v1/stores/{storeId}/galeries": {},
+    "/api/v1/stores/{storeId}/galeries/{galeryId}": {
+      "get": {
+        "description": "Get/Download picture of store by ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "#/components/parameters/StoreId"
+          },
+          {
+            "$ref": "#/components/parameters/GaleryId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get/download store picture by ID",
+            "content": {
+              "image/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The picture is not exists in server",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "fail",
+                  "message": "Gambar tidak ditemukan."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/stores/{storeId}/products": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "#/components/parameters/Accept"
+          },
+          {
+            "$ref": "#/components/parameters/StoreId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get products of store",
+            "content": {
+              "application/json":{
+                "examples": {
+                  "Produk": {
+                    "$ref": "#/components/examples/ProductDatas"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          }
+        }
+      }
+    },
+    "/api/v1/stores/{storeId}/products/{productId}": {
+    },
+    "/api/v1/stores/{storeId}/products/{productId}/categories": {}
+  },
+  "components": {
+    "parameters": {
+      "Authorization": {
+        "required": true,
+        "in": "header",
+        "name": "Authorization",
+        "description": "The place for put the API Token",
+        "schema": {
+          "type": "string"
+        },
+        "examples": {
+          "Contoh": {
+            "value": "Bearer _your_api_token_"
+          },
+          "Ucup": {
+            "value": "Bearer 7|kSelGIww9AlEqW4wY6ksN5XV0AD55NowcWGnTlpZ871b85d9"
+          }
+        }
+      },
+      "Accept": {
+        "in": "header",
+        "required": false,
+        "name": "Accept",
+        "description": "Determine content type of response",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "application/json",
+            "text/html"
+          ],
+          "default": "text/html"
+        },
+        "examples": {
+          "json": {
+            "value": "application/json"
+          },
+          "html": {
+            "value": "text/html"
+          }
+        }
+      },
+      "StoreId": {
+        "required": true,
+        "in": "path",
+        "name": "storeId",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "GaleryId": {
+        "required": true,
+        "in": "path",
+        "name": "galeryId",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ProductId": {
+        "required": true,
+        "in": "path",
+        "name": "productId",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "responses": {
+      "Unauthenticated": {
+        "description": "Unauthenticated user",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "example": {
+              "message": "unauthenticaed"
+            }
+          }
+        }
+      }
+    },
+    "examples": {
+      "StoreDatas": {
+        "value": {
+          "total": 5,
+          "data": [
+            {
+              "id": "106863342543",
+              "name": "Toko 1334345456",
+              "description": "Ini adalah toko buah",
+              "address": "Jl. A. Yani No.98, Melayu, Kec. Banjarmasin Tengah, Kota Banjarmasin, Kalimantan Selatan",
+              "operation_time": "05.00 - 15.00",
+              "phone": "08123456163",
+              "is_favorited": false,
+              "gmap_url": "https://maps.app.goo.gl/p5z1XkJVjYQau2JG6"
+            },
+            {
+              "id": "186020626187",
+              "name": "Toko 96702335",
+              "description": "Ini adalah toko buah",
+              "address": "Jl. A. Yani No.98, Melayu, Kec. Banjarmasin Tengah, Kota Banjarmasin, Kalimantan Selatan",
+              "operation_time": "05.00 - 15.00",
+              "phone": "08123456495",
+              "is_favorited": false,
+              "gmap_url": "https://maps.app.goo.gl/p5z1XkJVjYQau2JG6"
+            },
+            {
+              "id": "223976837376",
+              "name": "Toko 2096073062",
+              "description": "Ini adalah toko buah",
+              "address": "Jl. A. Yani No.98, Melayu, Kec. Banjarmasin Tengah, Kota Banjarmasin, Kalimantan Selatan",
+              "operation_time": "05.00 - 15.00",
+              "phone": "08123456168",
+              "is_favorited": false,
+              "gmap_url": "https://maps.app.goo.gl/p5z1XkJVjYQau2JG6"
+            },
+            {
+              "id": "238561331888",
+              "name": "Toko 65015366",
+              "description": "Ini adalah toko buah",
+              "address": "Jl. A. Yani No.98, Melayu, Kec. Banjarmasin Tengah, Kota Banjarmasin, Kalimantan Selatan",
+              "operation_time": "05.00 - 15.00",
+              "phone": "08123456650",
+              "is_favorited": false,
+              "gmap_url": "https://maps.app.goo.gl/p5z1XkJVjYQau2JG6"
+            },
+            {
+              "id": "623576361313",
+              "name": "Toko 1047736089",
+              "description": "Ini adalah toko buah",
+              "address": "Jl. A. Yani No.98, Melayu, Kec. Banjarmasin Tengah, Kota Banjarmasin, Kalimantan Selatan",
+              "operation_time": "05.00 - 15.00",
+              "phone": "08123456621",
+              "is_favorited": false,
+              "gmap_url": "https://maps.app.goo.gl/p5z1XkJVjYQau2JG6"
+            }
+          ],
+          "links": {
+            "first": "http://localhost:8000/api/v1/stores?page=1",
+            "last": "http://localhost:8000/api/v1/stores?page=2",
+            "prev": null,
+            "next": "http://localhost:8000/api/v1/stores?page=2"
+          },
+          "meta": {
+            "current_page": 1,
+            "from": 1,
+            "last_page": 2,
+            "links": [
+              {
+                "url": null,
+                "label": "&laquo; Previous",
+                "active": false
+              },
+              {
+                "url": "http://localhost:8000/api/v1/stores?page=1",
+                "label": "1",
+                "active": true
+              },
+              {
+                "url": "http://localhost:8000/api/v1/stores?page=2",
+                "label": "2",
+                "active": false
+              },
+              {
+                "url": "http://localhost:8000/api/v1/stores?page=2",
+                "label": "Next &raquo;",
+                "active": false
+              }
+            ],
+            "path": "http://localhost:8000/api/v1/stores",
+            "per_page": 5,
+            "to": 5,
+            "total": 7
+          }
+        }
+      },
+      "StoreDetail": {
+        "value": {
+          "data": {
+            "id": "106863342543",
+            "name": "Toko 1334345456",
+            "description": "Ini adalah toko buah",
+            "address": "Jl. A. Yani No.98, Melayu, Kec. Banjarmasin Tengah, Kota Banjarmasin, Kalimantan Selatan",
+            "operation_time": "05.00 - 15.00",
+            "phone": "08123456163",
+            "is_favorited": false,
+            "gmap_url": "https://maps.app.goo.gl/p5z1XkJVjYQau2JG6",
+            "galeries": [
+              [
+                {
+                  "id": "110791101349",
+                  "name": "market.png"
+                },
+                {
+                  "id": "971658344737",
+                  "name": "toko.png"
+                }
+              ]
+            ]
+          },
+          "status": "success",
+          "message": "Sukses mengambil detail toko."
+        }
+      },
+      "ProductDatas": {
+        "value": {
+          "total": 2,
+          "data": [
+              {
+                  "id": "377793228580",
+                  "name": "product28",
+                  "description": "Lorem ipsum dolor sit amet.",
+                  "price": "120000.00",
+                  "stock": 65,
+                  "categories": [
+                      "fruit",
+                      "vegetable"
+                  ]
+              },
+              {
+                  "id": "482005570833",
+                  "name": "Banana53",
+                  "description": "Lorem ipsum dolor sit amet.",
+                  "price": "164000.00",
+                  "stock": 49,
+                  "categories": [
+                      "fruit",
+                      "vegetable"
+                  ]
+              }
+          ],
+          "links": {
+              "first": "http://localhost:8000/api/v1/stores/106863342543/products?page=1",
+              "last": "http://localhost:8000/api/v1/stores/106863342543/products?page=2",
+              "prev": null,
+              "next": "http://localhost:8000/api/v1/stores/106863342543/products?page=2"
+          },
+          "meta": {
+              "current_page": 1,
+              "from": 1,
+              "last_page": 2,
+              "links": [
+                  {
+                      "url": null,
+                      "label": "&laquo; Previous",
+                      "active": false
+                  },
+                  {
+                      "url": "http://localhost:8000/api/v1/stores/106863342543/products?page=1",
+                      "label": "1",
+                      "active": true
+                  },
+                  {
+                      "url": "http://localhost:8000/api/v1/stores/106863342543/products?page=2",
+                      "label": "2",
+                      "active": false
+                  },
+                  {
+                      "url": "http://localhost:8000/api/v1/stores/106863342543/products?page=2",
+                      "label": "Next &raquo;",
+                      "active": false
+                  }
+              ],
+              "path": "http://localhost:8000/api/v1/stores/106863342543/products",
+              "per_page": 2,
+              "to": 2,
+              "total": 4
+          }
+        }
+    }
+    }
+  }
+}
