@@ -27,15 +27,20 @@ class ScanController extends Controller
         $this->validateServerError($response);
         $this->validateClientError($response);
         $response = $response->json();
+        [$produceCondition, $produceName] = str($response['prediction'])
+            ->lower()
+            ->split(' ', 2)
+            ->all();
+        $freshnessScore = ($produceCondition === 'fresh') ? $response['confidence'] : 1 - $response['confidence'];
 
         // Menyimpan hasil ke database
         $produce = Produce::select(['id', 'name'])
-            ->where('name', $response['prediction'])
+            ->where('name', $produceName)
             ->first();
         $scanResult = ScanResult::create([
             'user_id' => $request->user()->id,
             'produce_id' => $produce->id,
-            'freshness_score' => $response['confidence']
+            'freshness_score' => $freshnessScore
         ]);
 
 
@@ -47,7 +52,7 @@ class ScanController extends Controller
                     'id' => $scanResult->id,
                     'freshness_score' => $scanResult->freshness_score,
                     'produce' => $produce->name,
-                    'scanned_at' => $scanResult->created_at
+                    'scanned_at' => $scanResult->created_at->format('d-m-Y h-i-s')
                 ]
             ]
         ], 200);
