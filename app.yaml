@@ -1,4 +1,5 @@
 runtime: php83
+service: freshguard-backend
 
 env_variables:
   APP_ENV: production
