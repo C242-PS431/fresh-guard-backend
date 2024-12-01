@@ -1,0 +1,27 @@
+runtime: php83
+
+env_variables:
+  APP_ENV: production
+  APP_DEBUG: false
+  APP_STORAGE: /tmp
+  LOG_CHANNEL: stderr
+
+  MODEL_URL: "freshness_ml_model_url"
+  DISCORD_WEBHOOK: "discord_webhookurl_for_log"
+
+  DB_CONNECTION: "dbms_name"
+  DB_HOST: "db_ip_address"
+  DB_PORT: "db_port"
+  DB_DATABASE: "db_name"
+  DB_USERNAME: "db_usernmae"
+  DB_PASSWORD: "db_password"
+
+
+automatic_scaling:
+  max_instances: 2
+  min_instances: 0
+
+network:
+  session_affinity: false
+
+entrypoint: php artisan octane:start --host=0.0.0.0 --port=${PORT} --workers=2 --max-requests=500
