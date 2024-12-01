@@ -5,9 +5,13 @@ env_variables:
   APP_DEBUG: false
   APP_STORAGE: /tmp
   LOG_CHANNEL: stderr
+  APP_KEY: "base64:laravel_app_key"
 
   MODEL_URL: "freshness_ml_model_url"
   DISCORD_WEBHOOK: "discord_webhookurl_for_log"
+
+  GCS_BUCKET_NAME: ujun-bucket-2024
+  GCS_KEY_FILE_PATH: storage/credentials/gcp-credentials.json
 
   DB_CONNECTION: "dbms_name"
   DB_HOST: "db_ip_address"
