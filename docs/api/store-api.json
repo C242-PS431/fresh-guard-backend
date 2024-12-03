@@ -7,15 +7,20 @@
   },
   "servers": [
     {
-      "url": "https://{domain}",
+      "url": "{protocol}://{domain}",
       "description": "Fresh Guard API Server",
       "variables": {
+        "protocol": {
+          "default": "http",
+          "enum": ["http", "https"]
+        },
         "domain": {
-          "default": "localhost",
+          "default": "35.219.27.170",
           "enum": [
             "localhost",
             "prod",
-            "not-ready-yet"
+            "not-ready-yet",
+            "35.219.27.170"
           ]
         }
       }
@@ -33,6 +38,7 @@
             "$ref": "#/components/parameters/Accept"
           },
           {
+            "description": "Parameter for get only favorite store or not",
             "required": false,
             "in": "query",
             "name": "favorite",
