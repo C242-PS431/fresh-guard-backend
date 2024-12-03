@@ -26,6 +26,8 @@ class StoreResource extends JsonResource
             'phone' => $this->phone,
             'is_favorited' => $request->user()->isFavoritedStore($this->id),
             'gmap_url' => $this->gmap_url,
+            'longitude' => $this->longitude,
+            'latitude' => $this->latitude,
             'galeries' => $this->when(isset($this->additional['status']), $galeries)
         ];
     }

@@ -20,15 +20,22 @@ class ScanController extends Controller
     public function scanFreshness(ScanRequest $request): JsonResponse
     {
         $imageFile = $request->file('image');
+        $texture = $request->input('texture');
+        $smell = $request->string('smell');
+        $verifiedStore = $request->boolean('verified_store', false);
+
+        // validate input
+        $smell = in_array($smell, ['fresh', 'neutral', 'rotten']) ? $smell : null;
+        $texture = in_array($texture, ['hard', 'normal', 'soft']) ? $texture : null;
 
         // mengirim gambar ke model Machine Learning
-        $response = $this->sendImageToMl($imageFile);
+        $response = $this->sendImageToMl($imageFile, $smell, $texture, $verifiedStore);
         // validasi error
         $this->validateServerError($response);
         $this->validateClientError($response);
         $response = $response->json();
         [$produceCondition, $produceName] = mb_split(' ', $response['prediction']) ?: [null, null];
-        $freshnessScore = (strtolower($produceCondition) === 'fresh') ? $response['confidence'] : bcsub('1', $response['confidence']);
+        $freshnessScore = (strtolower($produceCondition) === 'fresh') ? $response['confidence'] : bcsub('41', $response['confidence']);
 
         // Menyimpan hasil ke database
         $produce = Produce::select(['id', 'name'])
@@ -36,7 +43,7 @@ class ScanController extends Controller
             ->first();
 
         // menyimpan komuditas baru jika belum ada di database
-        if(is_null($produce)){
+        if (is_null($produce)) {
             $produce = Produce::create([
                 'name' => $produceName
             ]);
@@ -45,7 +52,10 @@ class ScanController extends Controller
         $scanResult = ScanResult::create([
             'user_id' => $request->user()->id,
             'produce_id' => $produce->id,
-            'freshness_score' => $freshnessScore
+            'freshness_score' => $freshnessScore,
+            'smell' => $smell,
+            'texture' => $texture,
+            'verified_store' => $verifiedStore
         ]);
 
 
@@ -77,16 +87,30 @@ class ScanController extends Controller
         ], 200);
     }
 
-    private function sendImageToMl($imageFile): Response
+    /**
+     * @param \Illuminate\Http\UploadedFile $imageFile
+     */
+    private function sendImageToMl($imageFile, $smell, $texture, $verifiedStore): Response
     {
         try {
-            $response = Http::attach(
-                'file',
-                $imageFile->getContent(),
-                $imageFile->getFilename()
-            )->post(config('freshguard.model.baseurl') . '/predict');
+            $response = Http::asMultipart()->post(config('freshguard.model.baseurl') . '/predict', [
+                [
+                    'name' => 'validation',
+                    'contents' => json_encode([
+                        'smell' => $smell,
+                        'texture' => $texture,
+                        'verifiedShop' => $verifiedStore
+                    ])
+                ],
+                [
+                    'name' => 'file',
+                    'contents' => fopen($imageFile->getPathname(), 'r'),
+                    'filename' => $imageFile->getClientOriginalName(),
+                ],
+            ]);
             return $response;
         } catch (Exception $e) {
+            Discord::send($e->getMessage());
             throw new HttpResponseException(response()->json([
                 'status' => 'error',
                 'message' => 'Server error'

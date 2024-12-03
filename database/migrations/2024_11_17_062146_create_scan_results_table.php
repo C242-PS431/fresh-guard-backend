@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->string('id', 20)->primary();
             $table->string('user_id', 20);
             $table->string("produce_id", 20);
-            $table->decimal("freshness_score", 3, 2);
+            $table->decimal("freshness_score", 4, 2);
             $table->boolean("is_tracked")->default(false);
             $table->timestamp("created_at");
 

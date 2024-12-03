@@ -21,7 +21,10 @@ class ScanResult extends Model
     public $fillable = [
         'user_id',
         'produce_id',
-        'freshness_score'
+        'freshness_score',
+        'smell',
+        'texture',
+        'verified_store'
     ];
 
     public static function boot()

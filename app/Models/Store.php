@@ -22,6 +22,8 @@ class Store extends Model
         'operation_time',
         'phone',
         'gmap_url',
+        'longitude',
+        'latitude',
     ];
 
     public function storeGaleries(): HasMany

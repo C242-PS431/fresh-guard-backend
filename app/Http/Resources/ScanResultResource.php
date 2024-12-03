@@ -23,6 +23,9 @@ class ScanResultResource extends JsonResource
             'produce' => $this->produce,
             'is_tracked' => (boolean) $this->is_tracked,
             'freshness_score' => $this->freshness_score,
+            'smell' => $this->smell,
+            'texture' => $this->texture,
+            'verified_store' => $this->verified_store,
             'created_at' => $created_at->format('d-m-Y H:i:s')
         ];
     }
