@@ -353,7 +353,9 @@
               "operation_time": "05.00 - 15.00",
               "phone": "08123456163",
               "is_favorited": false,
-              "gmap_url": "https://maps.app.goo.gl/p5z1XkJVjYQau2JG6"
+              "gmap_url": "https://maps.app.goo.gl/p5z1XkJVjYQau2JG6",
+              "longitude": "90",
+              "latitude": "90"
             },
             {
               "id": "186020626187",
@@ -363,7 +365,9 @@
               "operation_time": "05.00 - 15.00",
               "phone": "08123456495",
               "is_favorited": false,
-              "gmap_url": "https://maps.app.goo.gl/p5z1XkJVjYQau2JG6"
+              "gmap_url": "https://maps.app.goo.gl/p5z1XkJVjYQau2JG6",
+              "longitude": "90",
+              "latitude": "90"
             },
             {
               "id": "223976837376",
@@ -373,7 +377,9 @@
               "operation_time": "05.00 - 15.00",
               "phone": "08123456168",
               "is_favorited": false,
-              "gmap_url": "https://maps.app.goo.gl/p5z1XkJVjYQau2JG6"
+              "gmap_url": "https://maps.app.goo.gl/p5z1XkJVjYQau2JG6",
+              "longitude": "90",
+              "latitude": "90"
             },
             {
               "id": "238561331888",
@@ -383,7 +389,9 @@
               "operation_time": "05.00 - 15.00",
               "phone": "08123456650",
               "is_favorited": false,
-              "gmap_url": "https://maps.app.goo.gl/p5z1XkJVjYQau2JG6"
+              "gmap_url": "https://maps.app.goo.gl/p5z1XkJVjYQau2JG6",
+              "longitude": "90",
+              "latitude": "90"
             },
             {
               "id": "623576361313",
@@ -393,7 +401,9 @@
               "operation_time": "05.00 - 15.00",
               "phone": "08123456621",
               "is_favorited": false,
-              "gmap_url": "https://maps.app.goo.gl/p5z1XkJVjYQau2JG6"
+              "gmap_url": "https://maps.app.goo.gl/p5z1XkJVjYQau2JG6",
+              "longitude": "90",
+              "latitude": "90"
             }
           ],
           "links": {
@@ -446,6 +456,8 @@
             "phone": "08123456163",
             "is_favorited": false,
             "gmap_url": "https://maps.app.goo.gl/p5z1XkJVjYQau2JG6",
+            "longitude": "90",
+            "latitude": "90",
             "galeries": [
               [
                 {
