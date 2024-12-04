@@ -35,7 +35,7 @@ class ScanController extends Controller
         $this->validateClientError($response);
         $response = $response->json();
         [$produceCondition, $produceName] = mb_split(' ', $response['prediction']) ?: [null, null];
-        $freshnessScore = (strtolower($produceCondition) === 'fresh') ? $response['confidence'] : bcsub('41', $response['confidence']);
+        $freshnessScore = (strtolower($produceCondition) === 'fresh') ? $response['confidence'] : bcsub('100', $response['confidence']);
 
         // Menyimpan hasil ke database
         $produce = Produce::select(['id', 'name'])
