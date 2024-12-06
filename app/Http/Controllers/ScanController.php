@@ -49,6 +49,7 @@ class ScanController extends Controller
             ]);
         }
 
+        /** @var ScanResult */
         $scanResult = ScanResult::create([
             'user_id' => $request->user()->id,
             'produce_id' => $produce->id,
@@ -58,6 +59,7 @@ class ScanController extends Controller
             'verified_store' => $verifiedStore
         ]);
 
+        $scanResult->created_at->setTimezone('Asia/Jakarta');
 
         return response()->json([
             'status' => 'success',
