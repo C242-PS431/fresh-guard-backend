@@ -29,4 +29,4 @@ automatic_scaling:
 network:
   session_affinity: false
 
-entrypoint: php artisan octane:start --host=0.0.0.0 --port=${PORT} --workers=2 --max-requests=500
+entrypoint: php artisan octane:start --host=0.0.0.0 --port=${PORT} --max-requests=500
