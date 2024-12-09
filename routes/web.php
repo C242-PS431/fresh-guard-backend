@@ -13,6 +13,9 @@ Route::get('/scan', function () {
 Route::get('/user/dashboard', function () {
     return view('user.dashboard');
 });
+Route::get('/login', function () {
+    return view('auth.login');
+});
 // Route::get('/list', function () {
 //     return json_encode(Storage::disk('gcs')->files());
 // });
