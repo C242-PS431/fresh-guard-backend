@@ -5,7 +5,10 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
-    return response()->redirectTo(url('/up'));
+    return view('index');
+});
+Route::get('/scan', function () {
+    return view('scan.index', ['date' => 'Aku cinta PHP']);
 });
 
 // Route::get('/list', function () {
