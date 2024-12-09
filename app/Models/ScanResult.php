@@ -10,6 +10,7 @@ use Illuminate\Support\Carbon;
 
 /**
  * @property User $user
+ * @property Carbon $created_at
  */
 class ScanResult extends Model
 {

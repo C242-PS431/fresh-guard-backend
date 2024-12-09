@@ -35,9 +35,9 @@ class ScanController extends Controller
         $this->validateClientError($response);
         $response = $response->json();
         [$produceCondition, $produceName] = mb_split(' ', $response['prediction']) ?: [null, null];
-        $freshnessScore = (strtolower($produceCondition) === 'fresh') ? $response['confidence'] : bcsub('100', $response['confidence']);
+        $freshnessScore = $response['confidence'];
 
-        // Menyimpan hasil ke database
+        // Mendapatkan data komudutas dari database
         $produce = Produce::select(['id', 'name'])
             ->where('name', $produceName)
             ->first();
@@ -49,6 +49,7 @@ class ScanController extends Controller
             ]);
         }
 
+        // Menyimpan hasil scan ke database
         /** @var ScanResult */
         $scanResult = ScanResult::create([
             'user_id' => $request->user()->id,
@@ -59,7 +60,7 @@ class ScanController extends Controller
             'verified_store' => $verifiedStore
         ]);
 
-        $scanResult->created_at->setTimezone('Asia/Jakarta');
+        $scanResult->created_at->setTimezone(7);
 
         return response()->json([
             'status' => 'success',
