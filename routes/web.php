@@ -10,7 +10,9 @@ Route::get('/', function () {
 Route::get('/scan', function () {
     return view('scan.index', ['date' => 'Aku cinta PHP']);
 });
-
+Route::get('/user/dashboard', function () {
+    return view('user.dashboard');
+});
 // Route::get('/list', function () {
 //     return json_encode(Storage::disk('gcs')->files());
 // });
