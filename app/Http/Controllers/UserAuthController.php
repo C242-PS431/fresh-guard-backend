@@ -7,6 +7,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\JsonResponse;
 
@@ -36,6 +37,7 @@ class UserAuthController extends Controller
         /** @var \App\Models\User */
         $user = User::create($credentials);
         $token = $user->createToken($request->input('device_name') ?: $request->header('User-Agent'));
+        $token->plainTextToken;
         return $this->createSuccessResponse($user, $token, __('auth.register.success'), 201);
     }
 
@@ -45,6 +47,7 @@ class UserAuthController extends Controller
         $password = $request->input('password');
         $deviceName = $request->input('device_name') ?: $request->header('User-Agent');
 
+        /** @var User */
         $user = User::where('username', $username)->first();
         if (is_null($user) || !Hash::check($password, $user->password)) {
             throw new HttpResponseException(response()->json([
@@ -54,6 +57,7 @@ class UserAuthController extends Controller
             ], 400));
         }
         $token = $user->createToken($deviceName);
+        Auth::login($user);
 
         return $this->createSuccessResponse($user, $token, __('auth.login.success'), 200);
     }

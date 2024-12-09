@@ -13,7 +13,6 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Validation\Rule;
 
 class ScanController extends Controller
 {
@@ -57,7 +56,7 @@ class ScanController extends Controller
             'freshness_score' => $freshnessScore,
             'smell' => $smell,
             'texture' => $texture,
-            'verified_store' => $verifiedStore
+            'verified_store' => $verifiedStore ?: false
         ]);
 
         $scanResult->created_at->setTimezone(7);

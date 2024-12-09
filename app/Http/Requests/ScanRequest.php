@@ -6,6 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Auth;
 use \Illuminate\Contracts\Validation\Validator;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Session;
 
 class ScanRequest extends FormRequest
 {
@@ -14,7 +17,26 @@ class ScanRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::check();
+        if(!Auth::check()){
+            return false;
+        }
+
+        // $limitterKey = 'scan_freshness: ' . Auth::user()->id;
+        // $tooManyAttemptKey = 'scan_freshness_too_many_attempts_count: ' . Auth::user()->id;
+        // $tooManyAttemptCount = Cache::get($tooManyAttemptKey) ?: 0;
+        // $minutes = ($tooManyAttemptCount == 0)? 1 : 10 * $tooManyAttemptCount ;
+        // $seconds = 60 * (1);
+        
+        // if(RateLimiter::tooManyAttempts($limitterKey, 10)){
+        //     Cache::put($tooManyAttemptKey, ++$tooManyAttemptCount, $seconds); 
+        //     abort(response()->json([
+        //         'status' => 'fail',
+        //         'message' => 'Terlalu banyak percobaan, coba lagi dalam' . RateLimiter::availableIn($limitterKey)
+        //     ], 400));
+        // };
+        // RateLimiter::increment($limitterKey, $seconds);
+
+        return true;
     }
 
     /**

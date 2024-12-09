@@ -26,7 +26,7 @@ class ScanResultController extends Controller
             $date = null;
         }
 
-        $builder = $request->user()->scanResults()->orderBy('created_at');
+        $builder = $request->user()->scanResults()->orderByDesc('created_at');
         if (!is_null($date)) {
             // Hitung awal dan akhir hari dalam UTC+0
             $startOfDayUtc = $date->copy()->startOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
