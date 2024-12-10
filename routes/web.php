@@ -8,14 +8,15 @@ Route::get('/', function () {
     return view('index');
 });
 
-
-Route::get('/scan', function () {
-    return view('scan.index', ['date' => 'Aku cinta PHP']);
+Route::middleware([CustomAuth::class])->group(function () {
+    Route::get('/scan', function () {
+        return view('scan.index', ['date' => 'Aku cinta PHP']);
+    });
+    Route::get('/user/dashboard', function () {
+        return view('user.dashboard');
+    });
+    Route::get('/po', fn()=> "OK");
 });
-Route::get('/user/dashboard', function () {
-    return view('user.dashboard');
-});
-Route::get('/po', fn() => "OK");
 
 Route::get('/login', function () {
     return view('auth.login');

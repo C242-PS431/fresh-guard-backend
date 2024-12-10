@@ -19,14 +19,14 @@ class CustomAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $personalAccessToken = PersonalAccessToken::findToken($request->cookie('token_login'));
-        if(blank($personalAccessToken)){
-            return response([$personalAccessToken , $request->cookie(), $request->session()->all(), "SSSSSSS", $_REQUEST, $_COOKIE]);
+        $personalAccessToken = (isset($_COOKIE['token_login'])) ? $personalAccessToken = PersonalAccessToken::findToken($_COOKIE['token_login']) : null;
+        if (blank($personalAccessToken)) {
+            return redirect('/');
         }
 
         $user = User::find($personalAccessToken->tokenable_id);
-        if(blank($user)){
-            return redirect('/login');
+        if (blank($user)) {
+            return redirect('/');
         }
 
         Auth::login($user);

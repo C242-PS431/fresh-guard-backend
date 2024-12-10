@@ -69,7 +69,7 @@ class UserAuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
         Auth::logout();
-        $cookie = cookie('token_login', "kosonf", 0);
+        $cookie = cookie('token_login', "kosong", 0);
         return response()->json([
             'status' => 'success',
             'message' => __('auth.logout.success')
