@@ -21,7 +21,7 @@ class CustomAuth
     {
         $personalAccessToken = PersonalAccessToken::findToken($request->cookie('token_login'));
         if(blank($personalAccessToken)){
-            return response([$personalAccessToken , $request->cookie(), $request->session()->all()]);
+            return response([$personalAccessToken , $request->cookie(), $request->session()->all(), "SSSSSSS", $_REQUEST, $_COOKIE]);
         }
 
         $user = User::find($personalAccessToken->tokenable_id);

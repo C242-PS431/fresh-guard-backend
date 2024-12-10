@@ -39,7 +39,8 @@ class UserAuthController extends Controller
         $token = $user->createToken($request->input('device_name') ?: $request->header('User-Agent'));
         Auth::login($user);
         $cookie = cookie('token_login', $token->plainTextToken, 100000);
-        return $this->createSuccessResponse($user, $token, __('auth.register.success'), 201);
+        return $this->createSuccessResponse($user, $token, __('auth.register.success'), 201)
+            ->withCookie($cookie);
     }
 
     public function login(Request $request): JsonResponse
@@ -59,7 +60,9 @@ class UserAuthController extends Controller
         }
         $token = $user->createToken($deviceName);
         Auth::login($user);
-        return $this->createSuccessResponse($user, $token, __('auth.login.success'), 200);
+        $cookie = cookie('token_login', $token->plainTextToken, 100000);
+        return $this->createSuccessResponse($user, $token, __('auth.login.success'), 200)
+            ->withCookie($cookie);
     }
 
     public function logout(Request $request): JsonResponse
@@ -71,6 +74,6 @@ class UserAuthController extends Controller
             'status' => 'success',
             'message' => __('auth.logout.success')
         ], 200)
-        ->cookie($cookie);
+            ->cookie($cookie);
     }
 }
