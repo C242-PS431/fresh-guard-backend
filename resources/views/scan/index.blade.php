@@ -59,13 +59,15 @@ Scanner
         <div class="form-control">
           <label class="label cursor-pointer">
             <span class="label-text">Tidak</span>
-            <input type="radio" name="verified_store" value="false" class="radio checked:bg-red-500" checked="checked" />
+            <input type="radio" name="verified_store" value="false" class="radio checked:bg-red-500"
+              checked="checked" />
           </label>
         </div>
         <div class="form-control">
           <label class="label cursor-pointer">
             <span class="label-text">Ya</span>
-            <input type="radio" name="verified_store" value="true" class="radio checked:bg-blue-500" checked="checked" />
+            <input type="radio" name="verified_store" value="true" class="radio checked:bg-blue-500"
+              checked="checked" />
           </label>
         </div>
       </div>
@@ -81,7 +83,7 @@ Scanner
 
     try {
       const response = await window.axios.post('/api/v1/scans/freshness', formData, {
-        credentias: true, 
+        credentias: true,
         headers: {
           "Accept": 'application/json',
         }
