@@ -12,6 +12,9 @@ Route::middleware([GuestMiddleware::class])->group(function () {
     Route::get('/login', function () {
         return view('auth.login');
     });
+    Route::get('/register', function () {
+        return view('auth.register');
+    });
 });
 
 Route::middleware([CustomAuth::class])->group(function () {
@@ -20,6 +23,9 @@ Route::middleware([CustomAuth::class])->group(function () {
     });
     Route::get('/user/dashboard', function () {
         return view('user.dashboard');
+    });
+    Route::get('/user/history', function () {
+        return view('user.history');
     });
     Route::get('/po', fn() => "OK");
 });
