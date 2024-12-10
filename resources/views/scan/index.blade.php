@@ -80,17 +80,21 @@ Scanner
   document.getElementById('form-scan').addEventListener('submit', async function (event) {
     event.preventDefault();
     const formData = new FormData(this);
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
 
     try {
       const response = await window.axios.post('/api/v1/scans/freshness', formData, {
-        credentias: true,
+        withCredentials: true,
         headers: {
           "Accept": 'application/json',
         }
       });
 
-      alert(JSON.stringify((await response.json()).data.scan_result))
-      console.log(await response.json())
+      const result = await response.data;
+      alert(JSON.stringify(result.data.scan_result));
+      console.log(result);
     } catch (e) {
       console.log(e)
     }
