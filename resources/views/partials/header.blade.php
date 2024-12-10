@@ -4,6 +4,5 @@
         <a href="/" class="text-2xl font-semibold  text-neutral-900">
             Freshguard
         </a>
-
     </div>
 </header>
