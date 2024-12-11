@@ -37,4 +37,5 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/v1/stores/{storeId}/products', [ProductController::class, 'getStoreProducts']);
     Route::get('/v1/stores/{storeId}/products/{productId}/categories', [ProductController::class, 'getStoreProducts']);
     Route::get('/v1/products/categories', [CategoryController::class, 'getListProductCategories']);
+    Route::get('/v1/nutritions', [ScanResultController::class, 'getUserNutiritionByDate']);
 });

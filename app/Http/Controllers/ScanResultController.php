@@ -17,8 +17,8 @@ class ScanResultController extends Controller
         $isGetTracked = $request->boolean('get_tracked', false);
         try {
             $date = $request->query('date');
-            if(strtolower($date) == 'today'){
-                $date = Date::today();
+            if (strtolower($date) == 'today') {
+                $date = Date::today('Asia/Jakarta');
             } else {
                 $date = Date::createFromFormat('d-m-Y', $date, 'Asia/Jakarta');
             }
@@ -28,17 +28,70 @@ class ScanResultController extends Controller
 
         $builder = $request->user()->scanResults()->orderByDesc('created_at');
         if (!is_null($date)) {
-            // Hitung awal dan akhir hari dalam UTC+0
+            // Hitung awal dan akhir hari dalam UTC+0 dari UTC+7
             $startOfDayUtc = $date->copy()->startOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
             $endOfDayUtc = $date->copy()->endOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
 
             $builder->whereBetween('created_at', [$startOfDayUtc, $endOfDayUtc]);
         }
-        if($isGetTracked){
+        if ($isGetTracked) {
             $builder->where('is_tracked', true);
         }
 
         $scanResults = $builder->paginate(perPage: $perPage, page: $page);
         return new ScanResultCollection($scanResults);
+    }
+
+    public function getUserNutiritionByDate(Request $request)
+    {
+        $date = null;
+        try {
+            $date = $request->query('date');
+            $date = Date::createFromFormat('d-m-Y', $date, 'Asia/Jakarta');
+        } catch (\Exception $e) {
+            $date = Date::today('Asia/Jakarta');
+        }
+
+
+        $startOfDayJakarta = $date->copy()->startOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
+        $endOfDayJakarta = $date->copy()->endOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
+
+        echo $endOfDayJakarta . PHP_EOL;
+        
+        /**
+         * @var \Illuminate\Database\Eloquent\Collection<\App\Models\ScanResult>
+         */
+        $scanResults = $request->user()
+            ->scanResults()
+            ->whereBetween('created_at', [$startOfDayJakarta, $endOfDayJakarta])
+            ->orderByDesc('created_at')
+            ->get();
+
+        
+
+        $nutirtions = $scanResults->reduce(function ($carry, $scanResult) {
+            return [
+                'calories' => $carry['calories'] + $scanResult->produce->calories,
+                'protein' => $carry['protein'] + $scanResult->produce->protein,
+                'carbohydrates' => $carry['carbohydrates'] + $scanResult->produce->carbohydrates,
+                'fiber' => $carry['fiber'] + $scanResult->produce->fiber
+            ];
+        }, [
+            'calories' => 0,
+            'protein' => 0,
+            'carbohydrates' => 0,
+            'fiber' => 0
+        ]);
+
+        // ini buat mengubah satuan nutrisi boey, dari miligram ke gram
+        $nutirtions['protein'] = ($nutirtions['protein'] / 1000);
+        $nutirtions['carbohydrates'] = $nutirtions['carbohydrates'] / 1000;
+        $nutirtions['fiber'] = $nutirtions['fiber'] / 1000;
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'kalori dalam satuan kkl dan yang lainnya dalam satuan gram',
+            'data' => $nutirtions
+        ]);
     }
 }

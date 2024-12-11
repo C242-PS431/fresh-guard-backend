@@ -83,13 +83,10 @@ Scanner
 
             document.getElementById('logoutButton').addEventListener('click', async () => {
                 try {
-                    await window.axios.post('/api/auth/logout', {}, {
-                        headers: {
-                            "Accept": "application/json"
-                        }
-                    });
+                    await window.axios.post('/api/auth/logout');
                     window.location.href = '/login';
                 } catch (error) {
+                    alert(error.response.data.message);
                     console.error('Logout failed', error);
                 }
             });

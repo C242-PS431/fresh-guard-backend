@@ -35,7 +35,7 @@ class ScanController extends Controller
         // validasi error
         $this->validateServerError($response);
         $this->validateClientError($response);
-        $this->logSuccess($response);
+        $this->logMlToDiscord($response);
         $response = $response->json();
         [$produceCondition, $produceName] = mb_split(' ', $response['prediction']) ?: [null, null];
         $freshnessScore = $response['confidence'];
@@ -135,7 +135,7 @@ class ScanController extends Controller
     private function validateServerError(Response $response)
     {
         if ($response->serverError()) {
-            Discord::logResponse($response, 'Mechine Learning nya error weh');
+            $this->logMlToDiscord($response);
             throw new HttpResponseException(response()->json([
                 'status' => 'fail',
                 'message' => 'Error saat proses scanning gambar.'
@@ -143,10 +143,19 @@ class ScanController extends Controller
         }
     }
 
+    /**
+     * @param Response $response
+     */
     private function validateClientError(Response $response)
     {
+        if(!blank($response->json('error'))){
+            abort(response()->json([
+                'status' => 'fail',
+                'message' => $response->json('error')
+            ], 400));
+        };
         if ($response->clientError()) {
-            Discord::logResponse($response, 'Salah di Backend');
+            $this->logMlToDiscord($response);
             throw new HttpResponseException(response()->json([
                 'status' => 'fail',
                 'message' => 'Gagal scanning gambar.'
@@ -164,15 +173,23 @@ class ScanController extends Controller
         }
     }
 
-    private function logSuccess($response){
-        $responseJson = json_encode($response, JSON_PRETTY_PRINT);
+    /**
+     * @param Response $response
+     */
+    private function logMlToDiscord($response){
+        $status = $response->status();
+        $responseJson = json_encode($response->json(), JSON_PRETTY_PRINT);
         $user = auth()->user();
-        $now = Date::now()->toString();
+        $now = Date::now('Asia/Jakarta')->format('d-m-Y h:i:s');
         Discord::send(<<<CONTENT
         Name: $user->name
+        Username: $user->username
         Time: $now
+        Status: $status
         ======= result =======
         $responseJson
+        ======================
+
         CONTENT);
     }
 }

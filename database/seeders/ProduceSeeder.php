@@ -33,25 +33,29 @@ class ProduceSeeder extends Seeder
                     'fiber' => $value[4]
                 ]);
             } catch (\Exception $e) {
-                echo $value[0] . "already exists" . PHP_EOL;
+                echo $value[0] . " already exists" . PHP_EOL;
             }
         });
 
+        echo PHP_EOL;
+
         $datas->each(function ($value) {
             try {
-                $produce = Produce::where('name', $value[0]);
-                $success = $produce->update([
-                    'calories' => $value[1],
-                    'protein' => $value[2],
-                    'carbohydrates' => $value[3],
-                    'fiber' => $value[4]
-                ]);
+                $success = Produce::where('name', $value[0])
+                    ->update([
+                        'calories' => $value[1],
+                        'protein' => $value[2],
+                        'carbohydrates' => $value[3],
+                        'fiber' => $value[4]
+                    ]);
 
-                if(!$success){
-                    echo $value[0] . "failed to update" . PHP_EOL;
+                if ($success <= 0) {
+                    echo $value[0] . " failed to update" . PHP_EOL;
+                } else {
+                    echo $value[0] . " success to update" . PHP_EOL;
                 }
             } catch (\Exception $e) {
-                echo $value[0] . "failed to update" . PHP_EOL;
+                echo $value[0] . " failed to update karna error" . PHP_EOL;
             }
         });
     }
