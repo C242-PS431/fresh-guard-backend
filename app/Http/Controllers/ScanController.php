@@ -8,11 +8,14 @@ use App\Models\Produce;
 use App\Models\ScanResult;
 use App\Util\Discord;
 use Exception;
+use Google\Cloud\Storage\StorageClient;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class ScanController extends Controller
 {
@@ -32,6 +35,7 @@ class ScanController extends Controller
         // validasi error
         $this->validateServerError($response);
         $this->validateClientError($response);
+        $this->logSuccess($response);
         $response = $response->json();
         [$produceCondition, $produceName] = mb_split(' ', $response['prediction']) ?: [null, null];
         $freshnessScore = $response['confidence'];
@@ -57,6 +61,14 @@ class ScanController extends Controller
             'smell' => $smell,
             'texture' => $texture,
             'verified_store' => $verifiedStore ?: false
+        ]);
+
+
+        $imageExtention = $imageFile->extension();
+        $storageClient = new StorageClient();
+        $bucket = $storageClient->bucket('freshguard-bucket');
+        $bucket->upload(fopen($imageFile->path(), 'r'), [
+            'name' => 'scan-images/' . uuid_create() .  ($imageExtention ? ".$imageExtention": "")
         ]);
 
         $scanResult->created_at->setTimezone(7);
@@ -150,5 +162,17 @@ class ScanController extends Controller
                 'message' => $message
             ], $status));
         }
+    }
+
+    private function logSuccess($response){
+        $responseJson = json_encode($response, JSON_PRETTY_PRINT);
+        $user = auth()->user();
+        $now = Date::now()->toString();
+        Discord::send(<<<CONTENT
+        Name: $user->name
+        Time: $now
+        ======= result =======
+        $responseJson
+        CONTENT);
     }
 }

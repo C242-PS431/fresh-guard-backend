@@ -11,11 +11,17 @@ Home
       <div class="text-center lg:text-left">
         <h1 class="text-4xl font-bold">Fresh Guard Register</h1>
         <p class="py-6">
-          Punya akun? Langsung login bang.
+          Nggak punya akun? Register dulu bang.
         </p>
       </div>
       <div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-        <form class="card-body" id="login-form">
+        <form class="card-body" id="register-form">
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Full Name</span>
+            </label>
+            <input type="text" name="name" placeholder="name" class="input input-bordered" required />
+          </div>
           <div class="form-control">
             <label class="label">
               <span class="label-text">Username</span>
@@ -39,7 +45,7 @@ Home
 
 <script>
     console.log(window.axios);
-    document.getElementById('login-form').addEventListener('submit', async function (event) {
+    document.getElementById('register-form').addEventListener('submit', async function (event) {
         event.preventDefault();
         const formData = new FormData(this);
 
@@ -50,7 +56,7 @@ Home
                 window.location.href = '/user/dashboard';
             })
             .catch(error => {
-                alert(JSON.stringify(error));
+                alert(error.response.data.message);
             });
     });
 </script>

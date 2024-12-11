@@ -11,7 +11,7 @@ Home
       <div class="text-center lg:text-left">
         <h1 class="text-4xl font-bold">Fresh Guard Login</h1>
         <p class="py-6">
-          Nggak punya akun? Register dulu bang.
+          Sudah punya akun? Langsung login bang.
         </p>
       </div>
       <div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
@@ -53,7 +53,7 @@ Home
         window.location.href = '/user/dashboard';
       })
       .catch(error => {
-        alert(JSON.stringify(error));
+        alert(error.response.data.message);
       });
   });
 </script>

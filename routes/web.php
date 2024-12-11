@@ -2,7 +2,6 @@
 
 use App\Http\Middleware\CustomAuth;
 use App\Http\Middleware\GuestMiddleware;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware([GuestMiddleware::class])->group(function () {

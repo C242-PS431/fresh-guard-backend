@@ -11,7 +11,8 @@ class ProduceSeeder extends Seeder
      * Run the database seeds.
      */
     public function run(): void
-    {;
+    {
+        ;
         // name, calories, protein, carbohydrates, fiber
         // mg
         $datas = collect([
@@ -23,13 +24,35 @@ class ProduceSeeder extends Seeder
         ]);
 
         $datas->each(function ($value) {
-            Produce::create([
-                'name' => $value[0],
-                'calories' => $value[1],
-                'protein' => $value[2],
-                'carbohydrates' => $value[3],
-                'fiber' => $value[4]
-            ]);
+            try {
+                Produce::create([
+                    'name' => $value[0],
+                    'calories' => $value[1],
+                    'protein' => $value[2],
+                    'carbohydrates' => $value[3],
+                    'fiber' => $value[4]
+                ]);
+            } catch (\Exception $e) {
+                echo $value[0] . "already exists" . PHP_EOL;
+            }
+        });
+
+        $datas->each(function ($value) {
+            try {
+                $produce = Produce::where('name', $value[0]);
+                $success = $produce->update([
+                    'calories' => $value[1],
+                    'protein' => $value[2],
+                    'carbohydrates' => $value[3],
+                    'fiber' => $value[4]
+                ]);
+
+                if(!$success){
+                    echo $value[0] . "failed to update" . PHP_EOL;
+                }
+            } catch (\Exception $e) {
+                echo $value[0] . "failed to update" . PHP_EOL;
+            }
         });
     }
 }

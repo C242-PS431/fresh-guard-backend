@@ -31,7 +31,7 @@ Scanner
     window.addEventListener('DOMContentLoaded', async () => {
         const parser = new DOMParser();
         const scanHistoryTbody = document.getElementById('scanHistoryTbody');
-        const data = await window.axios.get('/api/v1/scans?date=today&per_page=50', { headers: { "Accept": "application/json" } });
+        const data = await window.axios.get('/api/v1/scans?per_page=50');
         for (scan of data.data.data) {
             scanHistoryTbody.innerHTML += `@include('components.scan-result-row')`;
             const rowScan = scanHistoryTbody.lastElementChild 

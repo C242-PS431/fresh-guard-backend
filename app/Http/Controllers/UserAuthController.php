@@ -68,7 +68,7 @@ class UserAuthController extends Controller
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
-        Auth::logout();
+        session()->flush();
         $cookie = cookie('token_login', "kosong", 0);
         return response()->json([
             'status' => 'success',

@@ -17,19 +17,19 @@ Scanner
         <div class="form-control">
           <label class="label cursor-pointer">
             <span class="label-text">Busuk</span>
-            <input type="radio" name="smell" value="rotten" class="radio checked:bg-red-500" checked="checked" />
+            <input type="radio" name="smell" value="rotten" class="radio checked:bg-red-500" />
           </label>
         </div>
         <div class="form-control">
           <label class="label cursor-pointer">
             <span class="label-text">Netral</span>
-            <input type="radio" name="smell" value="neautral" class="radio checked:bg-white" checked="checked" />
+            <input type="radio" name="smell" value="neautral" class="radio checked:bg-white" checked="checked"/>
           </label>
         </div>
         <div class="form-control">
           <label class="label cursor-pointer">
             <span class="label-text">Segar</span>
-            <input type="radio" name="smell" value="fresh" class="radio checked:bg-blue-500" checked="checked" />
+            <input type="radio" name="smell" value="fresh" class="radio checked:bg-blue-500" />
           </label>
         </div>
       </div>
@@ -38,19 +38,19 @@ Scanner
         <div class="form-control">
           <label class="label cursor-pointer">
             <span class="label-text">Lembek</span>
-            <input type="radio" name="texture" value="soft" class="radio checked:bg-red-500" checked="checked" />
+            <input type="radio" name="texture" value="soft" class="radio checked:bg-red-500" />
           </label>
         </div>
         <div class="form-control">
           <label class="label cursor-pointer">
             <span class="label-text">Normal</span>
-            <input type="radio" name="texture" value="normal" class="radio checked:bg-white" checked="checked" />
+            <input type="radio" name="texture" value="normal" class="radio checked:bg-white" checked="checked"/>
           </label>
         </div>
         <div class="form-control">
           <label class="label cursor-pointer">
             <span class="label-text">Keras</span>
-            <input type="radio" name="texture" value="hard" class="radio checked:bg-blue-500" checked="checked" />
+            <input type="radio" name="texture" value="hard" class="radio checked:bg-blue-500" />
           </label>
         </div>
       </div>
@@ -59,15 +59,13 @@ Scanner
         <div class="form-control">
           <label class="label cursor-pointer">
             <span class="label-text">Tidak</span>
-            <input type="radio" name="verified_store" value="false" class="radio checked:bg-red-500"
-              checked="checked" />
+            <input type="radio" name="verified_store" value="false" class="radio checked:bg-red-500" />
           </label>
         </div>
         <div class="form-control">
           <label class="label cursor-pointer">
             <span class="label-text">Ya</span>
-            <input type="radio" name="verified_store" value="true" class="radio checked:bg-blue-500"
-              checked="checked" />
+            <input type="radio" name="verified_store" value="true" class="radio checked:bg-blue-500" checked="checked"/>
           </label>
         </div>
       </div>
