@@ -15,7 +15,7 @@ class GuestMiddleware
     {
         $personalAccessToken = (isset($_COOKIE['token_login'])) ? $personalAccessToken = PersonalAccessToken::findToken($_COOKIE['token_login']) : null;
         if (!blank($personalAccessToken)) {
-            return redirect('/login');
+            return redirect('/user/dashboard');
         }
         return $next($request);
     }
