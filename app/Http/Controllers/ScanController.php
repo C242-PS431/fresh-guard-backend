@@ -64,12 +64,12 @@ class ScanController extends Controller
         ]);
 
 
-        $imageExtention = $imageFile->extension();
-        $storageClient = new StorageClient();
-        $bucket = $storageClient->bucket('freshguard-bucket');
-        $bucket->upload(fopen($imageFile->path(), 'r'), [
-            'name' => 'scan-images/' . uuid_create() .  ($imageExtention ? ".$imageExtention": "")
-        ]);
+        // $imageExtention = $imageFile->extension();
+        // $storageClient = new StorageClient();
+        // $bucket = $storageClient->bucket('freshguard-bucket');
+        // $bucket->upload(fopen($imageFile->path(), 'r'), [
+        //     'name' => 'scan-images/' . uuid_create() .  ($imageExtention ? ".$imageExtention": "")
+        // ]);
 
         $scanResult->created_at->setTimezone(7);
 
