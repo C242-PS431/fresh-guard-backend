@@ -47,7 +47,11 @@ class ScanResultController extends Controller
         $date = null;
         try {
             $date = $request->query('date');
-            $date = Date::createFromFormat('d-m-Y', $date, 'Asia/Jakarta');
+            if($date == 'yesterday'){
+                $date = Date::yesterday('Asia/Jakarta');
+            } else {
+                $date = Date::createFromFormat('d-m-Y', $date, 'Asia/Jakarta');
+            }
         } catch (\Exception $e) {
             $date = Date::today('Asia/Jakarta');
         }
@@ -56,8 +60,6 @@ class ScanResultController extends Controller
         $startOfDayJakarta = $date->copy()->startOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
         $endOfDayJakarta = $date->copy()->endOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
 
-        echo $endOfDayJakarta . PHP_EOL;
-        
         /**
          * @var \Illuminate\Database\Eloquent\Collection<\App\Models\ScanResult>
          */
