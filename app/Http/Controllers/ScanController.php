@@ -26,10 +26,6 @@ class ScanController extends Controller
         $smell = $request->string('smell');
         $verifiedStore = $request->boolean('verified_store', false);
 
-        // validate input
-        $smell = in_array($smell, ['fresh', 'neutral', 'rotten']) ? $smell : null;
-        $texture = in_array($texture, ['hard', 'normal', 'soft']) ? $texture : null;
-
         // mengirim gambar ke model Machine Learning
         $response = $this->sendImageToMl($imageFile, $smell, $texture, $verifiedStore);
         // validasi error

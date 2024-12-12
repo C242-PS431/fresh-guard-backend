@@ -9,6 +9,7 @@ use \Illuminate\Contracts\Validation\Validator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\Rule;
 
 class ScanRequest extends FormRequest
 {
@@ -47,7 +48,10 @@ class ScanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'image' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:5120']
+            'image' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:10240'],
+            'smell' => ['required', Rule::in(['fresh', 'neutral', 'rotten'])],
+            'texture' => ['required', Rule::in(['hard', 'normal', 'soft'])],
+            'verified_store' => ['required', 'boolean'],
         ];
     }
 
