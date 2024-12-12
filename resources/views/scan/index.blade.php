@@ -23,7 +23,7 @@ Scanner
         <div class="form-control">
           <label class="label cursor-pointer">
             <span class="label-text">Netral</span>
-            <input type="radio" name="smell" value="neautral" class="radio checked:bg-white" checked="checked"/>
+            <input type="radio" name="smell" value="neutral" class="radio checked:bg-white" checked="checked"/>
           </label>
         </div>
         <div class="form-control">
