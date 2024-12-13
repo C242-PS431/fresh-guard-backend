@@ -15,7 +15,7 @@ class Discord
             $statusCode = $response->status();
             $content = $response->getBody()->getContents();
             $content = self::cutOverlengtMessageToDiscord($content);
-            Http::post(self::$WEBHOOK, [
+            Http::async()->post(self::$WEBHOOK, [
                 'content' => <<<MS
                 Message: $message
                 Status Code : $statusCode
@@ -28,7 +28,8 @@ class Discord
     public static function send($content)
     {
         if(self::$WEBHOOK !== null){
-            Http::post(self::$WEBHOOK, [
+            /** @var \GuzzleHttp\Promise\PromiseInterface */
+            $response = Http::async()->post(self::$WEBHOOK, [
                 'content' => $content
             ]);
         }
